@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package="com.ssubedir.grpccamera";
+
+service IpCamera{
+    rpc Stream (StreamRequest) returns (StreamResponse);
+    rpc StreamImage (StreamImageRequest) returns (StreamImageResponse);
+    rpc StreamVideo (stream StreamVideoRequest) returns (StreamVideoResponse);
+
+}
+
+message StreamRequest{
+    string data = 1;
+}
+
+message StreamResponse{
+    string response = 1;
+}
+
+message StreamImageRequest{
+    bytes image = 1;
+}
+   
+message StreamImageResponse{
+    string response = 1;
+}
+
+message StreamVideoRequest{
+    bytes video = 1;
+}
+
+message StreamVideoResponse{
+    string response = 1;
+}
+
+
+//grpcurl -plaintext -d '{"image": "hi"}' localhost:9000 IpCamera/Stream
