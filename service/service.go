@@ -7,31 +7,39 @@ import (
 	"image"
 	"image/jpeg"
 	"io"
+	proto "ipCamera/proto/ipcamera/proto"
 	"log"
 	"os"
-
-	proto "ipCamera/proto/ipcamera/proto"
 )
 
 type Service struct {
+	log *log.Logger
 }
 
-func NewService() *Service {
-	return &Service{}
+func NewService(l *log.Logger) *Service {
+	return &Service{l}
 }
 
 func (s *Service) Stream(ctx context.Context, req *proto.StreamRequest) (*proto.StreamResponse, error) {
 
-	fmt.Println("Client-", req.Data)
-	return &proto.StreamResponse{Response: "We got your message"}, nil
+	// Received message from client
+	s.log.Println("Received message from client.")
+	s.log.Println("Client:", req.Data)
+
+	// Respond to client
+	return &proto.StreamResponse{Response: "I got your message"}, nil
 }
 
 func (s *Service) StreamImage(ctx context.Context, req *proto.StreamImageRequest) (*proto.StreamImageResponse, error) {
 
-	fmt.Println("Client- Sent picture")
-	// save picture
+	// Received image from client
+	s.log.Println("Received image from client.")
+
+	// save image
 	serveFrames(req.Image)
-	return &proto.StreamImageResponse{Response: "We got your picture"}, nil
+
+	// Respond to client
+	return &proto.StreamImageResponse{Response: "I got your image"}, nil
 }
 
 func (s *Service) StreamVideo(stream proto.IpCamera_StreamVideoServer) error {
@@ -39,10 +47,8 @@ func (s *Service) StreamVideo(stream proto.IpCamera_StreamVideoServer) error {
 	_, err := stream.Recv()
 
 	if err != nil {
-		log.Fatal("Error fetching stream")
+		s.log.Fatal("Error fetching stream")
 	}
-
-	videoData := bytes.Buffer{}
 
 	for {
 		err := contextError(stream.Context())
@@ -50,25 +56,28 @@ func (s *Service) StreamVideo(stream proto.IpCamera_StreamVideoServer) error {
 			return err
 		}
 
-		log.Print("waiting to receive more data")
+		s.log.Println("Waiting for more chunks")
 
 		req, err := stream.Recv()
 		if err == io.EOF {
-			log.Print("no more data")
+			s.log.Println("EOF Stop stream")
 			break
 		}
 		if err != nil {
-			return fmt.Errorf("cannot receive chunk data: %v", err)
+			return fmt.Errorf("Cannot receive h264 chunk: %v", err)
 		}
-
-		chunk := req.GetVideo()
 
 		// process chunk
+		s.log.Println("Received a h264 chunk")
 
-		_, err = videoData.Write(chunk)
-		if err != nil {
-			return fmt.Errorf("cannot write chunk data: %v", err)
-		}
+		// h264 chunk
+		chunk := req.GetVideo()
+
+		// Process Chunk
+		// todo..
+
+		log.Println(chunk)
+
 	}
 
 	res := &proto.StreamVideoResponse{
@@ -77,10 +86,10 @@ func (s *Service) StreamVideo(stream proto.IpCamera_StreamVideoServer) error {
 
 	err = stream.SendAndClose(res)
 	if err != nil {
-		return fmt.Errorf("cannot send response: %v", err)
+		return fmt.Errorf("Cannot send response: %v", err)
 	}
 
-	fmt.Println("Done Streaming")
+	s.log.Println("Done Streaming")
 
 	return nil
 

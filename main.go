@@ -4,6 +4,7 @@ import (
 	"fmt"
 	proto "ipCamera/proto/ipcamera/proto"
 	"ipCamera/service"
+	"log"
 	"net"
 	"os"
 	"os/signal"
@@ -15,12 +16,15 @@ import (
 
 func main() {
 
+	l := log.New(os.Stdout, "gRPC IpCamera - ", log.LstdFlags)
+
 	// grpc
 	gs := grpc.NewServer()
-	c := service.NewService()
+	c := service.NewService(l)
 	proto.RegisterIpCameraServer(gs, c)
 	reflection.Register(gs)
 
+	// grpc
 	go func() {
 		// create a TCP socket for inbound server connections
 		l, err := net.Listen("tcp", ":9000")

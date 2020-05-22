@@ -12,6 +12,8 @@ github.com/envoyproxy/protoc-gen-validate v0.1.0 h1:EQciDnbrYxy13PgWoY8AqoxGiPrp
 github.com/envoyproxy/protoc-gen-validate v0.1.0/go.mod h1:iSmxcyjqTsJpI2R4NaDN7+kN2VEUnK/pcBlmesArF7c=
 github.com/fullstorydev/grpcurl v1.5.1 h1:MyN3rJxuk1etiBeNpXzjSM7GjhUndohhkgnRQ5LlPh8=
 github.com/fullstorydev/grpcurl v1.5.1/go.mod h1:gfDWAYMHBN+GjNeO30K9mAfpbYWtWd/bOebWSV0l6kY=
+github.com/gen2brain/x264-go v0.0.0-20200517120223-c08131f6fc8a h1:O6MN0Yik9iXHlC5t/NUznAgt18d0yAKIPZTihxLBIDE=
+github.com/gen2brain/x264-go v0.0.0-20200517120223-c08131f6fc8a/go.mod h1:17kvfYQKi9/QHiKPeqmJW0YuDPZEgy72tSBVmweSyiE=
 github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b/go.mod h1:SBH7ygxi8pfUlaOkMMuAQtPIUF8ecWP5IEl/CR7VP2Q=
 github.com/golang/mock v1.1.1/go.mod h1:oTYuIxOrZwtPieC+H1uAHpcLFnEyAGVDL/k47Jfbm0A=
 github.com/golang/protobuf v1.2.0/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
